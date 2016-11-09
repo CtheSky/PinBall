@@ -21,18 +21,20 @@ var draggingImage = null;
 // Image Array
 var draggableImageArray = [];
 
-// DraggableImage Object
-var DraggableImage = function(imageSrc,imageX, imageY, imageWidth, imageHeight){
-    this.imageX = imageX;
-    this.imageY = imageY;
-    this.imageWidth = imageWidth;
-    this.imageHeight = imageHeight;
+// Draggable Object
+var Draggable = function(b2PropDef, imageProp){
+    this.b2FixtureDef = b2PropDef.fixDef;
+    this.b2BodyDef = b2PropDef.bodyDef;
+    this.imageX = imageProp.imageX;
+    this.imageY = imageProp.imageY;
+    this.imageWidth = imageProp.imageWidth;
+    this.imageHeight = imageProp.imageHeight;
 
     var image = new Image();
-    image.src = imageSrc;
+    image.src = imageProp.imageSrc;
     image.onload = function(){
         ctx.drawImage(image, 0, 0, image.width, image.height,
-            imageX, imageY, imageWidth, imageHeight);
+            imageProp.imageX, imageProp.imageY, imageProp.imageWidth, imageProp.imageHeight);
     };
     this.image = image;
 };

@@ -21,10 +21,68 @@
     <script src="js/DraggableImage.js"></script>
     <script src="js/Box2d.min.js"></script>
     <script>
-        var orangeSquare = new DraggableImage('img/orange.jpg', 620, 20, 50, 50);
-        var orangeSquare2 = new DraggableImage('img/orange.jpg', 700, 20, 50, 50);
-        var blueSquare = new DraggableImage('img/blue.jpg', 620, 100, 50, 50);
-        var blueSquare2 = new DraggableImage('img/blue.jpg', 700, 100, 50, 50);
+
+        // Set scale factor from pixel to meters in box2d
+        var SCALE = 30;
+
+        var   b2Vec2 = Box2D.Common.Math.b2Vec2
+                , b2BodyDef = Box2D.Dynamics.b2BodyDef
+                , b2Body = Box2D.Dynamics.b2Body
+                , b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+                , b2Fixture = Box2D.Dynamics.b2Fixture
+                , b2World = Box2D.Dynamics.b2World
+                , b2MassData = Box2D.Collision.Shapes.b2MassData
+                , b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+                , b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+                , b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+                ;
+
+        var DYNAMIC_DEF_EXAMPLE = {
+            fixDef: new b2FixtureDef,
+            bodyDef: new b2BodyDef
+        };
+        DYNAMIC_DEF_EXAMPLE.fixDef.density = 1.0;
+        DYNAMIC_DEF_EXAMPLE.fixDef.friction = 0.5;
+        DYNAMIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
+        DYNAMIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_dynamicBody;
+
+        var STATIC_DEF_EXAMPLE = {
+            fixDef: new b2FixtureDef,
+            bodyDef: new b2BodyDef
+        };
+        STATIC_DEF_EXAMPLE.fixDef.density = 1.0;
+        STATIC_DEF_EXAMPLE.fixDef.friction = 0.5;
+        STATIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
+        STATIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_staticBody;
+
+        var orangeSquare = new Draggable(DYNAMIC_DEF_EXAMPLE,{
+            imageSrc: 'img/orange.jpg',
+            imageX: 620,
+            imageY: 20,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        var orangeSquare2 = new Draggable(DYNAMIC_DEF_EXAMPLE,{
+            imageSrc: 'img/orange.jpg',
+            imageX: 700,
+            imageY: 20,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        var blueSquare = new Draggable(STATIC_DEF_EXAMPLE,{
+            imageSrc: 'img/blue.jpg',
+            imageX: 620,
+            imageY: 100,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        var blueSquare2 = new Draggable(STATIC_DEF_EXAMPLE,{
+            imageSrc: 'img/blue.jpg',
+            imageX: 700,
+            imageY: 100,
+            imageWidth: 50,
+            imageHeight: 50
+        });
         draggableImageArray.push(orangeSquare);
         draggableImageArray.push(orangeSquare2);
         draggableImageArray.push(blueSquare);
@@ -44,24 +102,12 @@
         var world;
 
         function init() {
-            var   b2Vec2 = Box2D.Common.Math.b2Vec2
-                    , b2BodyDef = Box2D.Dynamics.b2BodyDef
-                    , b2Body = Box2D.Dynamics.b2Body
-                    , b2FixtureDef = Box2D.Dynamics.b2FixtureDef
-                    , b2Fixture = Box2D.Dynamics.b2Fixture
-                    , b2World = Box2D.Dynamics.b2World
-                    , b2MassData = Box2D.Collision.Shapes.b2MassData
-                    , b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
-                    , b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
-                    , b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-                    ;
+
 
             world = new b2World(
                     new b2Vec2(0, 10)    //gravity
                     ,  true                 //allow sleep
             );
-
-            var SCALE = 30;
 
             var fixDef = new b2FixtureDef;
             fixDef.density = 1.0;
@@ -84,14 +130,9 @@
             world.CreateBody(bodyDef).CreateFixture(fixDef);
 
             //create some objects
-            bodyDef.type = b2Body.b2_dynamicBody;
             for (var i = 0; i < draggableImageArray.length; i++) {
                 var dg = draggableImageArray[i];
-                fixDef.shape = new b2PolygonShape;
-                fixDef.shape.SetAsBox(dg.imageWidth * 0.5 / SCALE, dg.imageHeight * 0.5 / SCALE);
-                bodyDef.position.x = dg.imageX / SCALE;
-                bodyDef.position.y = dg.imageY / SCALE;
-                world.CreateBody(bodyDef).CreateFixture(fixDef);
+                createBox2dObjectFromDraggable(dg);
             }
 
             //setup debug draw
@@ -104,6 +145,17 @@
             world.SetDebugDraw(debugDraw);
 
         }; // init()
+
+        function createBox2dObjectFromDraggable(draggable) {
+            var fixDef = draggable.b2FixtureDef;
+            fixDef.shape = new b2PolygonShape;
+            fixDef.shape.SetAsBox(draggable.imageWidth * 0.5 / SCALE, draggable.imageHeight * 0.5 / SCALE);
+
+            var bodyDef = draggable.b2BodyDef;
+            bodyDef.position.x = draggable.imageX / SCALE;
+            bodyDef.position.y = draggable.imageY / SCALE;
+            world.CreateBody(bodyDef).CreateFixture(fixDef);
+        };
 
         function update() {
             world.Step(
