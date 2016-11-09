@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: ivory;
+            padding:10px;
+        }
+
+        #canvas {
+            border:1px solid red;
+        }
+    </style>
+</head>
+<body>
+    <p>Test drag image</p>
+    <canvas id="canvas" width=800 height=400></canvas>
+    <script src="js/DraggableImage.js"></script>
+    <script>
+        var orangeSquare = new DraggableImage('img/orange.jpg', 620, 20, 50, 50);
+        var orangeSquare2 = new DraggableImage('img/orange.jpg', 700, 20, 50, 50);
+        var blueSquare = new DraggableImage('img/blue.jpg', 620, 100, 50, 50);
+        var blueSquare2 = new DraggableImage('img/blue.jpg', 700, 100, 50, 50);
+        draggableImageArray.push(orangeSquare);
+        draggableImageArray.push(orangeSquare2);
+        draggableImageArray.push(blueSquare);
+        draggableImageArray.push(blueSquare2);
+    </script>
+</body>
+</html>
