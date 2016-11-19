@@ -65,12 +65,28 @@
             imageWidth: 50,
             imageHeight: 50
         });
+        var dynamicTriangle = new DynamicTriangle({
+            imageSrc: 'img/orangeTriangle.png',
+            imageX: 620,
+            imageY: 260,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        var staticTriangle = new StaticTriangle({
+            imageSrc: 'img/blueTriangle.png',
+            imageX: 700,
+            imageY: 260,
+            imageWidth: 50,
+            imageHeight: 50
+        });
         draggableImageArray.push(dynamicSquare);
         draggableImageArray.push(dynamicSquare2);
         draggableImageArray.push(staticSquare);
         draggableImageArray.push(staticSquare2);
         draggableImageArray.push(dynamicCircle);
         draggableImageArray.push(staticCircle);
+        draggableImageArray.push(dynamicTriangle);
+        draggableImageArray.push(staticTriangle);
 
 
         window.requestAnimFrame = (function(){

@@ -45,33 +45,41 @@ STATIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_staticBody;
 /*
  * -------- Subclass of Draggable -----------
  */
-var StaticSquare = function(imageProp){
-    Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp);
-};
+var StaticSquare = function(imageProp){ Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp); };
 StaticSquare.prototype = Object.create(Draggable.prototype);
 StaticSquare.prototype.constructor = StaticSquare;
 StaticSquare.prototype.createBox2dObjectInWorld = createSquareBox2dObjectInWorld;
 
-var DynamicSquare = function(imageProp){
-    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
-};
+var DynamicSquare = function(imageProp){ Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp); };
 DynamicSquare.prototype = Object.create(Draggable.prototype);
 DynamicSquare.prototype.constructor = DynamicSquare;
 DynamicSquare.prototype.createBox2dObjectInWorld = createSquareBox2dObjectInWorld;
 
-var StaticCircle = function(imageProp){
-    Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp);
-};
+var StaticCircle = function(imageProp){ Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp); };
 StaticCircle.prototype = Object.create(Draggable.prototype);
 StaticCircle.prototype.constructor = StaticCircle;
 StaticCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorld;
 
-var DynamicCircle = function(imageProp){
-    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
-};
+var DynamicCircle = function(imageProp){ Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp); };
 DynamicCircle.prototype = Object.create(Draggable.prototype);
 DynamicCircle.prototype.constructor = DynamicCircle;
 DynamicCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorld;
+
+var StaticTriangle = function(imageProp){
+    Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp);
+    this.vectors = [new b2Vec2(0, 0), new b2Vec2(this.imageWidth / SCALE, 0),new b2Vec2(0, this.imageHeight / SCALE)];
+};
+StaticTriangle.prototype = Object.create(Draggable.prototype);
+StaticTriangle.prototype.constructor = StaticTriangle;
+StaticTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectInWorld;
+
+var DynamicTriangle = function(imageProp){
+    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
+    this.vectors = [new b2Vec2(0, 0), new b2Vec2(this.imageWidth / SCALE, 0),new b2Vec2(0, this.imageHeight / SCALE)];
+};
+DynamicTriangle.prototype = Object.create(Draggable.prototype);
+DynamicTriangle.prototype.constructor = DynamicTriangle;
+DynamicTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectInWorld;
 
 // Helper function to create square box2d object
 function createSquareBox2dObjectInWorld(world) {
@@ -82,7 +90,7 @@ function createSquareBox2dObjectInWorld(world) {
     this.b2BodyDef.position.y = this.imageY / SCALE;
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
-}; // createSquareBox2dObjectInWorld(world)
+};
 
 // Helper function to create circle box2d object
 function createCircleBox2dObjectInWorld(world){
@@ -92,4 +100,15 @@ function createCircleBox2dObjectInWorld(world){
     this.b2BodyDef.position.y = this.imageY / SCALE;
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
-}
+};
+
+// Helper function to create triangle box2d object
+function createTriangleBox2dObjectInWorld(world){
+    this.b2FixtureDef.shape = new b2PolygonShape;
+    this.b2FixtureDef.shape.SetAsArray(this.vectors, this.vectors.length);
+
+    this.b2BodyDef.position.x = (this.imageX - this.imageWidth * 0.5) / SCALE;
+    this.b2BodyDef.position.y = this.imageY / SCALE;
+
+    world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
+};
