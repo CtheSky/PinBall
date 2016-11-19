@@ -23,38 +23,55 @@
     <script src="js/Draggable.js"></script>
     <script src="js/ConstructBlock.js"></script>
     <script>
-        var orangeSquare = new DynamicSquare({
+        var dynamicSquare = new DynamicSquare({
             imageSrc: 'img/orange.jpg',
             imageX: 620,
             imageY: 20,
             imageWidth: 50,
             imageHeight: 50
         });
-        var orangeSquare2 = new DynamicSquare({
+        var dynamicSquare2 = new DynamicSquare({
             imageSrc: 'img/orange.jpg',
             imageX: 700,
             imageY: 20,
             imageWidth: 50,
             imageHeight: 50
         });
-        var blueSquare = new StaticSquare({
+        var staticSquare = new StaticSquare({
             imageSrc: 'img/blue.jpg',
             imageX: 620,
             imageY: 100,
             imageWidth: 50,
             imageHeight: 50
         });
-        var blueSquare2 = new StaticSquare({
+        var staticSquare2 = new StaticSquare({
             imageSrc: 'img/blue.jpg',
             imageX: 700,
             imageY: 100,
             imageWidth: 50,
             imageHeight: 50
         });
-        draggableImageArray.push(orangeSquare);
-        draggableImageArray.push(orangeSquare2);
-        draggableImageArray.push(blueSquare);
-        draggableImageArray.push(blueSquare2);
+        var dynamicCircle = new DynamicCircle({
+            imageSrc: 'img/orangeCircle.png',
+            imageX: 620,
+            imageY: 180,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        var staticCircle = new StaticCircle({
+            imageSrc: 'img/blueCircle.png',
+            imageX: 700,
+            imageY: 180,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        draggableImageArray.push(dynamicSquare);
+        draggableImageArray.push(dynamicSquare2);
+        draggableImageArray.push(staticSquare);
+        draggableImageArray.push(staticSquare2);
+        draggableImageArray.push(dynamicCircle);
+        draggableImageArray.push(staticCircle);
+
 
         window.requestAnimFrame = (function(){
             return window.requestAnimationFrame       ||
@@ -70,8 +87,6 @@
         var world;
 
         function init() {
-
-
             world = new b2World(
                     new b2Vec2(0, 10)    //gravity
                     ,  true                 //allow sleep

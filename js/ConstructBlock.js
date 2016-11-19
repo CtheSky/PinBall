@@ -59,7 +59,21 @@ DynamicSquare.prototype = Object.create(Draggable.prototype);
 DynamicSquare.prototype.constructor = DynamicSquare;
 DynamicSquare.prototype.createBox2dObjectInWorld = createSquareBox2dObjectInWorld;
 
+var StaticCircle = function(imageProp){
+    Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp);
+};
+StaticCircle.prototype = Object.create(Draggable.prototype);
+StaticCircle.prototype.constructor = StaticCircle;
+StaticCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorld;
 
+var DynamicCircle = function(imageProp){
+    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
+};
+DynamicCircle.prototype = Object.create(Draggable.prototype);
+DynamicCircle.prototype.constructor = DynamicCircle;
+DynamicCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorld;
+
+// Helper function to create square box2d object
 function createSquareBox2dObjectInWorld(world) {
     this.b2FixtureDef.shape = new b2PolygonShape;
     this.b2FixtureDef.shape.SetAsBox(this.imageWidth * 0.5 / SCALE, this.imageHeight * 0.5 / SCALE);
@@ -69,3 +83,13 @@ function createSquareBox2dObjectInWorld(world) {
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
 }; // createSquareBox2dObjectInWorld(world)
+
+// Helper function to create circle box2d object
+function createCircleBox2dObjectInWorld(world){
+    this.b2FixtureDef.shape = new b2CircleShape(this.imageWidth * 0.5 / SCALE);
+
+    this.b2BodyDef.position.x = this.imageX / SCALE;
+    this.b2BodyDef.position.y = this.imageY / SCALE;
+
+    world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
+}
