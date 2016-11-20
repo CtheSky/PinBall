@@ -67,7 +67,6 @@ DynamicCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorl
 
 var StaticTriangle = function(imageProp){
     Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp);
-    this.vectors = [new b2Vec2(0, 0), new b2Vec2(this.imageWidth / SCALE, 0),new b2Vec2(0, this.imageHeight / SCALE)];
 };
 StaticTriangle.prototype = Object.create(Draggable.prototype);
 StaticTriangle.prototype.constructor = StaticTriangle;
@@ -75,7 +74,6 @@ StaticTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectInW
 
 var DynamicTriangle = function(imageProp){
     Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
-    this.vectors = [new b2Vec2(0, 0), new b2Vec2(this.imageWidth / SCALE, 0),new b2Vec2(0, this.imageHeight / SCALE)];
 };
 DynamicTriangle.prototype = Object.create(Draggable.prototype);
 DynamicTriangle.prototype.constructor = DynamicTriangle;
@@ -85,9 +83,10 @@ DynamicTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectIn
 function createSquareBox2dObjectInWorld(world) {
     this.b2FixtureDef.shape = new b2PolygonShape;
     this.b2FixtureDef.shape.SetAsBox(this.imageWidth * 0.5 / SCALE, this.imageHeight * 0.5 / SCALE);
+    console.log(this.b2FixtureDef.shape);
 
-    this.b2BodyDef.position.x = this.imageX / SCALE;
-    this.b2BodyDef.position.y = this.imageY / SCALE;
+    this.b2BodyDef.position.x = (this.imageX + this.imageWidth * 0.5) / SCALE;
+    this.b2BodyDef.position.y = (this.imageY + this.imageHeight * 0.5) / SCALE;
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
 };
@@ -96,18 +95,20 @@ function createSquareBox2dObjectInWorld(world) {
 function createCircleBox2dObjectInWorld(world){
     this.b2FixtureDef.shape = new b2CircleShape(this.imageWidth * 0.5 / SCALE);
 
-    this.b2BodyDef.position.x = this.imageX / SCALE;
-    this.b2BodyDef.position.y = this.imageY / SCALE;
+    this.b2BodyDef.position.x = (this.imageX + this.imageWidth * 0.5) / SCALE;
+    this.b2BodyDef.position.y = (this.imageY + this.imageHeight * 0.5) / SCALE;
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
 };
 
 // Helper function to create triangle box2d object
 function createTriangleBox2dObjectInWorld(world){
+    var vectors = [new b2Vec2(0, 0), new b2Vec2(this.imageWidth / SCALE, 0),new b2Vec2(0, this.imageHeight / SCALE)];
     this.b2FixtureDef.shape = new b2PolygonShape;
-    this.b2FixtureDef.shape.SetAsArray(this.vectors, this.vectors.length);
+    this.b2FixtureDef.shape.SetAsArray(vectors, vectors.length);
+    console.log(this.b2FixtureDef.shape);
 
-    this.b2BodyDef.position.x = (this.imageX - this.imageWidth * 0.5) / SCALE;
+    this.b2BodyDef.position.x = this.imageX / SCALE;
     this.b2BodyDef.position.y = this.imageY / SCALE;
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
