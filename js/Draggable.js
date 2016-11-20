@@ -28,6 +28,9 @@ var draggingResizer = {
     y: 0
 };
 
+// Floating panel
+var $panel = $('#panel');
+
 // Image Array
 var draggableImageArray = [];
 
@@ -53,6 +56,8 @@ Draggable.prototype.imageRight = function(){ return this.imageX + this.imageWidt
 Draggable.prototype.imageTop = function(){ return this.imageY; };
 Draggable.prototype.imageBottom = function(){ return this.imageY + this.imageHeight; };
 
+
+// -------------- draw functions --------------
 // Draw draggableImage
 function draw(draggableImage){
     var dg = draggableImage;
@@ -105,6 +110,13 @@ function redrawDraggables(){
     }
 }
 
+// draw floating panel
+function redrawFloatingPanel(){
+    $panel.css('left', offsetX + selectedImage.imageX + selectedImage.imageWidth + 10);
+    $panel.css('top', offsetY + selectedImage.imageY);
+}
+
+// ----------- hit detect functions ------------
 // Find clicked Image and set draggingImage to it
 function hitImage(x, y) {
     for (var i = 0; i < draggableImageArray.length; i++) {
@@ -156,12 +168,11 @@ function handleMouseDown(e) {
     startY = parseInt(e.clientY - offsetY);
     var clickedImage = hitImage(startX, startY);
     draggingResizer = anchorHitTest(startX, startY);
-    if (draggingResizer != -1)
-        console.log(draggingResizer);
     if (draggingResizer < 0 && clickedImage != draggingImage) {
         draggingImage = clickedImage;
         selectedImage = clickedImage;
         redrawDraggables();
+        redrawFloatingPanel();
     }
 }
 
@@ -211,10 +222,6 @@ function handleMouseMove(e) {
 
         if(selectedImage.imageWidth < 16) { selectedImage.imageWidth = 16;}
         if(selectedImage.imageHeight < 16) { selectedImage.imageHeight = 16;}
-
-        // redraw the images
-        redrawDraggables();
-
     } else if (draggingImage) {
         // move the image by the amount of the latest drag
         var dx = mouseX - startX;
@@ -224,10 +231,11 @@ function handleMouseMove(e) {
         // reset the startXY for next time
         startX = mouseX;
         startY = mouseY;
-
-        // redraw the images
-        redrawDraggables();
     }
+
+    // redraw the images
+    redrawDraggables();
+    redrawFloatingPanel();
 
 }
 
