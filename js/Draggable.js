@@ -28,6 +28,9 @@ var draggingResizer = {
     y: 0
 };
 
+// translate from degree rto radian
+var TO_RADIANS = Math.PI / 180;
+
 // Floating panel
 var $panel = $('#panel');
 
@@ -42,6 +45,7 @@ var Draggable = function(b2PropDef, imageProp){
     this.imageY = imageProp.imageY;
     this.imageWidth = imageProp.imageWidth;
     this.imageHeight = imageProp.imageHeight;
+    this.imageDegree = 0;
 
     var image = new Image();
     image.src = imageProp.imageSrc;
@@ -94,7 +98,6 @@ function drawDragAnchor(x, y) {
 
 // Redraw all draggable instances and division line
 function redrawDraggables(){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawDivision();
     for (var i = 0; i < draggableImageArray.length; i++) {
         var dg = draggableImageArray[i];
@@ -110,10 +113,39 @@ function redrawDraggables(){
     }
 }
 
-// draw floating panel
+// Redraw all draggable instances other than given draggable
+function redrawDraggablesOtherThan(dg){
+    for (var i = 0; i < draggableImageArray.length; i++) {
+        var toDraw = draggableImageArray[i];
+        if (toDraw != dg)
+            draw(toDraw);
+    }
+}
+
+// Draw rotated image
+function drawRotatedDraggable(){
+    var image = selectedImage.image;
+
+    clean();
+    redrawDraggablesOtherThan(selectedImage);
+
+    ctx.save();
+    ctx.translate(selectedImage.imageX, selectedImage.imageY);
+    ctx.translate(selectedImage.imageWidth / 2, selectedImage.imageHeight / 2);
+    ctx.rotate(selectedImage.imageDegree * TO_RADIANS);
+    ctx.drawImage(image, 0, 0, image.width, image.height,
+        -(selectedImage.imageWidth / 2), -(selectedImage.imageHeight / 2), selectedImage.imageWidth, selectedImage.imageHeight);
+    ctx.restore();
+}
+
+// Draw floating panel
 function redrawFloatingPanel(){
     $panel.css('left', offsetX + selectedImage.imageX + selectedImage.imageWidth + 10);
     $panel.css('top', offsetY + selectedImage.imageY);
+}
+
+function clean(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // ----------- hit detect functions ------------
@@ -162,6 +194,31 @@ function anchorHitTest(x, y) {
     return -1;
 }
 
+
+// ----- Rotate Event Handler -----
+var timeout, timeInterval = 20;
+$('#cw').on('mousedown', function(){
+    var rotateAndDraw = function(){
+        selectedImage.imageDegree = (selectedImage.imageDegree + 1) % 360;
+        drawRotatedDraggable();
+        timeout = setTimeout(rotateAndDraw, timeInterval);
+    };
+    timeout = setTimeout(rotateAndDraw, timeInterval);
+}).on('mouseup mouseleave', function() {
+    clearTimeout(timeout);
+});
+
+$('#ccw').on('mousedown', function(){
+    var rotateAndDraw = function(){
+        selectedImage.imageDegree = (selectedImage.imageDegree - 1) % 360;
+        drawRotatedDraggable();
+        timeout = setTimeout(rotateAndDraw, timeInterval);
+    };
+    timeout = setTimeout(rotateAndDraw, timeInterval);
+}).on('mouseup mouseleave', function() {
+    clearTimeout(timeout);
+});
+
 // ----- Mouse Event Handler -----
 function handleMouseDown(e) {
     startX = parseInt(e.clientX - offsetX);
@@ -171,6 +228,7 @@ function handleMouseDown(e) {
     if (draggingResizer < 0 && clickedImage != draggingImage) {
         draggingImage = clickedImage;
         selectedImage = clickedImage;
+        clean();
         redrawDraggables();
         redrawFloatingPanel();
     }
@@ -222,6 +280,11 @@ function handleMouseMove(e) {
 
         if(selectedImage.imageWidth < 16) { selectedImage.imageWidth = 16;}
         if(selectedImage.imageHeight < 16) { selectedImage.imageHeight = 16;}
+
+        // redraw the images
+        clean();
+        redrawDraggables();
+        redrawFloatingPanel();
     } else if (draggingImage) {
         // move the image by the amount of the latest drag
         var dx = mouseX - startX;
@@ -231,11 +294,14 @@ function handleMouseMove(e) {
         // reset the startXY for next time
         startX = mouseX;
         startY = mouseY;
+
+        // redraw the images
+        clean();
+        redrawDraggables();
+        redrawFloatingPanel();
     }
 
-    // redraw the images
-    redrawDraggables();
-    redrawFloatingPanel();
+
 
 }
 
