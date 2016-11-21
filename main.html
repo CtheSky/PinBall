@@ -90,6 +90,20 @@
             imageWidth: 50,
             imageHeight: 50
         });
+        var leftFlip = new LeftFlip({
+            imageSrc: 'img/leftFlip.png',
+            imageX: 620,
+            imageY: 340,
+            imageWidth: 50,
+            imageHeight: 50
+        });
+        var rightFlip = new RightFlip({
+            imageSrc: 'img/rightFlip.png',
+            imageX: 700,
+            imageY: 340,
+            imageWidth: 50,
+            imageHeight: 50
+        });
         draggableImageArray.push(dynamicSquare);
         draggableImageArray.push(dynamicSquare2);
         draggableImageArray.push(staticSquare);
@@ -98,7 +112,8 @@
         draggableImageArray.push(staticCircle);
         draggableImageArray.push(dynamicTriangle);
         draggableImageArray.push(staticTriangle);
-
+        draggableImageArray.push(leftFlip);
+        draggableImageArray.push(rightFlip);
 
         window.requestAnimFrame = (function(){
             return window.requestAnimationFrame       ||
