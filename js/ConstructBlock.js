@@ -10,6 +10,8 @@
 var SCALE = 30;
 // Set shortcut for Box2D definition
 var   b2Vec2 = Box2D.Common.Math.b2Vec2
+    , b2Transform = Box2D.Common.Math.b2Transform
+    , b2Mat22 = Box2D.Common.Math.b2Mat22
     , b2BodyDef = Box2D.Dynamics.b2BodyDef
     , b2Body = Box2D.Dynamics.b2Body
     , b2FixtureDef = Box2D.Dynamics.b2FixtureDef
@@ -83,13 +85,15 @@ DynamicTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectIn
 function createSquareBox2dObjectInWorld(world) {
     this.b2FixtureDef.shape = new b2PolygonShape;
     this.b2FixtureDef.shape.SetAsBox(this.imageWidth * 0.5 / SCALE, this.imageHeight * 0.5 / SCALE);
-    console.log(this.b2FixtureDef.shape);
 
     this.b2BodyDef.position.x = (this.imageX + this.imageWidth * 0.5) / SCALE;
     this.b2BodyDef.position.y = (this.imageY + this.imageHeight * 0.5) / SCALE;
 
-    world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
-};
+    var body = world.CreateBody(this.b2BodyDef);
+    var vecToCenter = new b2Vec2((this.imageX + 0.5 * this.imageWidth) / SCALE, (this.imageY + 0.5 * this.imageHeight) / SCALE);
+    body.SetTransform(new b2Transform(vecToCenter, b2Mat22.FromAngle(this.imageDegree * TO_RADIANS)));
+    body.CreateFixture(this.b2FixtureDef);
+}
 
 // Helper function to create circle box2d object
 function createCircleBox2dObjectInWorld(world){
@@ -99,17 +103,22 @@ function createCircleBox2dObjectInWorld(world){
     this.b2BodyDef.position.y = (this.imageY + this.imageHeight * 0.5) / SCALE;
 
     world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
-};
+}
 
 // Helper function to create triangle box2d object
 function createTriangleBox2dObjectInWorld(world){
-    var vectors = [new b2Vec2(0, 0), new b2Vec2(this.imageWidth / SCALE, 0),new b2Vec2(0, this.imageHeight / SCALE)];
+    var vectors = [
+        new b2Vec2(-0.5 * this.imageWidth / SCALE, -0.5 * this.imageHeight / SCALE),
+        new b2Vec2(0.5 * this.imageWidth / SCALE, -0.5 * this.imageHeight / SCALE),
+        new b2Vec2(-0.5 * this.imageWidth / SCALE, 0.5 * this.imageHeight / SCALE)];
     this.b2FixtureDef.shape = new b2PolygonShape;
     this.b2FixtureDef.shape.SetAsArray(vectors, vectors.length);
-    console.log(this.b2FixtureDef.shape);
 
-    this.b2BodyDef.position.x = this.imageX / SCALE;
-    this.b2BodyDef.position.y = this.imageY / SCALE;
+    this.b2BodyDef.position.x = (this.imageX + this.imageWidth * 0.5) / SCALE;
+    this.b2BodyDef.position.y = (this.imageY + this.imageHeight * 0.5) / SCALE;
 
-    world.CreateBody(this.b2BodyDef).CreateFixture(this.b2FixtureDef);
-};
+    var body = world.CreateBody(this.b2BodyDef);
+    var vecToCenter = new b2Vec2((this.imageX + 0.5 * this.imageWidth) / SCALE, (this.imageY + 0.5 * this.imageHeight) / SCALE);
+    body.SetTransform(new b2Transform(vecToCenter, b2Mat22.FromAngle(this.imageDegree * TO_RADIANS)));
+    body.CreateFixture(this.b2FixtureDef);
+}
