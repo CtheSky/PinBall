@@ -122,8 +122,14 @@ function redrawDraggables(){
 
 // Draw floating panel
 function redrawFloatingPanel(){
-    $panel.css('left', offsetX + selectedImage.imageX + selectedImage.imageWidth + 10);
-    $panel.css('top', offsetY + selectedImage.imageY);
+    if (selectedImage){
+        $panel.show();
+        $panel.css('left', offsetX + selectedImage.imageX + selectedImage.imageWidth + 10);
+        $panel.css('top', offsetY + selectedImage.imageY);
+    } else {
+        $panel.hide();
+    }
+
 }
 
 // clean canvas
@@ -208,6 +214,14 @@ $('#ccw').on('mousedown', function(){
     timeout = setTimeout(rotateAndDraw, timeInterval);
 }).on('mouseup mouseleave', function() {
     clearTimeout(timeout);
+});
+
+// Delete Event Handler
+$('#delete').click(function(){
+    var index = draggableImageArray.indexOf(selectedImage);
+    draggableImageArray.splice(index, 1);
+    selectedImage = null;
+    flushCanvas();
 });
 
 // ----- Mouse Event Handler -----
