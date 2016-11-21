@@ -33,6 +33,7 @@ var TO_RADIANS = Math.PI / 180;
 
 // Floating panel
 var $panel = $('#panel');
+var $keyBindPanel = $('#key_bind_panel');
 
 // Image Array
 var draggableImageArray = [];
@@ -123,9 +124,14 @@ function redrawDraggables(){
 // Draw floating panel
 function redrawFloatingPanel(){
     if (selectedImage){
+        if (selectedImage.constructor == LeftFlip || selectedImage.constructor == RightFlip)
+            $keyBindPanel.show();
+        else
+            $keyBindPanel.hide();
         $panel.show();
         $panel.css('left', offsetX + selectedImage.imageX + selectedImage.imageWidth + 10);
         $panel.css('top', offsetY + selectedImage.imageY);
+
     } else {
         $panel.hide();
     }
@@ -222,6 +228,13 @@ $('#delete').click(function(){
     draggableImageArray.splice(index, 1);
     selectedImage = null;
     flushCanvas();
+});
+
+// Key bind Event Handler
+$('#bind').click(function(){
+    var key = $('#key_bind').val();
+    selectedImage.keyBind = key;
+    console.log(key);
 });
 
 // ----- Mouse Event Handler -----
