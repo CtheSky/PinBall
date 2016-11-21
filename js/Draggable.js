@@ -63,12 +63,19 @@ Draggable.prototype.imageBottom = function(){ return this.imageY + this.imageHei
 
 // -------------- draw functions --------------
 // Draw draggableImage
-function draw(draggableImage){
-    var dg = draggableImage;
-    var image = draggableImage.image;
+function draw(dg){
+    var image = dg.image;
     // draw the image
+    // ctx.drawImage(image, 0, 0, image.width, image.height,
+    //     dg.imageX, dg.imageY, dg.imageWidth, dg.imageHeight);
+
+    ctx.save();
+    ctx.translate(dg.imageX, dg.imageY);
+    ctx.translate(dg.imageWidth / 2, dg.imageHeight / 2);
+    ctx.rotate(dg.imageDegree * TO_RADIANS);
     ctx.drawImage(image, 0, 0, image.width, image.height,
-        dg.imageX, dg.imageY, dg.imageWidth, dg.imageHeight);
+        -(dg.imageWidth / 2), -(dg.imageHeight / 2), dg.imageWidth, dg.imageHeight);
+    ctx.restore();
 }
 
 // Draw division line between item panel and game panel
@@ -98,9 +105,9 @@ function drawDragAnchor(x, y) {
 
 // Redraw all draggable instances and division line
 function redrawDraggables(){
-    drawDivision();
     for (var i = 0; i < draggableImageArray.length; i++) {
         var dg = draggableImageArray[i];
+        console.log(dg.imageDegree);
         draw(dg);
     }
     if (draggingImage) {
@@ -113,39 +120,23 @@ function redrawDraggables(){
     }
 }
 
-// Redraw all draggable instances other than given draggable
-function redrawDraggablesOtherThan(dg){
-    for (var i = 0; i < draggableImageArray.length; i++) {
-        var toDraw = draggableImageArray[i];
-        if (toDraw != dg)
-            draw(toDraw);
-    }
-}
-
-// Draw rotated image
-function drawRotatedDraggable(){
-    var image = selectedImage.image;
-
-    clean();
-    redrawDraggablesOtherThan(selectedImage);
-
-    ctx.save();
-    ctx.translate(selectedImage.imageX, selectedImage.imageY);
-    ctx.translate(selectedImage.imageWidth / 2, selectedImage.imageHeight / 2);
-    ctx.rotate(selectedImage.imageDegree * TO_RADIANS);
-    ctx.drawImage(image, 0, 0, image.width, image.height,
-        -(selectedImage.imageWidth / 2), -(selectedImage.imageHeight / 2), selectedImage.imageWidth, selectedImage.imageHeight);
-    ctx.restore();
-}
-
 // Draw floating panel
 function redrawFloatingPanel(){
     $panel.css('left', offsetX + selectedImage.imageX + selectedImage.imageWidth + 10);
     $panel.css('top', offsetY + selectedImage.imageY);
 }
 
+// clean canvas
 function clean(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// redraw canvas
+function flushCanvas(){
+    clean();
+    drawDivision();
+    redrawDraggables();
+    redrawFloatingPanel();
 }
 
 // ----------- hit detect functions ------------
@@ -200,7 +191,7 @@ var timeout, timeInterval = 20;
 $('#cw').on('mousedown', function(){
     var rotateAndDraw = function(){
         selectedImage.imageDegree = (selectedImage.imageDegree + 1) % 360;
-        drawRotatedDraggable();
+        flushCanvas();
         timeout = setTimeout(rotateAndDraw, timeInterval);
     };
     timeout = setTimeout(rotateAndDraw, timeInterval);
@@ -211,7 +202,7 @@ $('#cw').on('mousedown', function(){
 $('#ccw').on('mousedown', function(){
     var rotateAndDraw = function(){
         selectedImage.imageDegree = (selectedImage.imageDegree - 1) % 360;
-        drawRotatedDraggable();
+        flushCanvas();
         timeout = setTimeout(rotateAndDraw, timeInterval);
     };
     timeout = setTimeout(rotateAndDraw, timeInterval);
@@ -228,9 +219,7 @@ function handleMouseDown(e) {
     if (draggingResizer < 0 && clickedImage != draggingImage) {
         draggingImage = clickedImage;
         selectedImage = clickedImage;
-        clean();
-        redrawDraggables();
-        redrawFloatingPanel();
+        flushCanvas();
     }
 }
 
@@ -281,10 +270,8 @@ function handleMouseMove(e) {
         if(selectedImage.imageWidth < 16) { selectedImage.imageWidth = 16;}
         if(selectedImage.imageHeight < 16) { selectedImage.imageHeight = 16;}
 
-        // redraw the images
-        clean();
-        redrawDraggables();
-        redrawFloatingPanel();
+        // redraw canvas
+        flushCanvas();
     } else if (draggingImage) {
         // move the image by the amount of the latest drag
         var dx = mouseX - startX;
@@ -295,10 +282,8 @@ function handleMouseMove(e) {
         startX = mouseX;
         startY = mouseY;
 
-        // redraw the images
-        clean();
-        redrawDraggables();
-        redrawFloatingPanel();
+        // redraw canvas
+        flushCanvas();
     }
 
 
