@@ -44,7 +44,7 @@ $('#input-friction').on('change',function(){
     } else {
         selectedImage.b2FixtureDef.friction = friction;
     }
-})
+});
 
 // ----- Rotate Event Handler -----
 var timeout, timeInterval = 20;
@@ -79,8 +79,8 @@ $('#delete').click(function(){
 });
 
 // Key bind Event Handler
+var $inputKey = $('#input_key');
 $('#bind').click(function(){
-    var $inputKey = $('#input_key');
     var key = $inputKey.val();
     if (key.match(/^[0-9a-z]+$/)) {
         selectedImage.keyBind = key;
@@ -95,4 +95,11 @@ $('#bind').click(function(){
 function flushPanel() {
     $('#input-density').val(selectedImage.b2FixtureDef.density * 10);
     $('#input-friction').val(selectedImage.b2FixtureDef.friction * 10);
+    var key = selectedImage.keyBind;
+    if (key) {
+        $inputKey.attr('placeholder', 'Current binding: ' + key);
+    } else {
+        $inputKey.attr('placeholder', 'Enter a key to bind...');
+    }
+
 }
