@@ -66,9 +66,6 @@ Draggable.prototype.imageBottom = function(){ return this.imageY + this.imageHei
 // Draw draggableImage
 function draw(dg){
     var image = dg.image;
-    // draw the image
-    // ctx.drawImage(image, 0, 0, image.width, image.height,
-    //     dg.imageX, dg.imageY, dg.imageWidth, dg.imageHeight);
 
     ctx.save();
     ctx.translate(dg.imageX, dg.imageY);
@@ -77,15 +74,6 @@ function draw(dg){
     ctx.drawImage(image, 0, 0, image.width, image.height,
         -(dg.imageWidth / 2), -(dg.imageHeight / 2), dg.imageWidth, dg.imageHeight);
     ctx.restore();
-}
-
-// Draw division line between item panel and game panel
-function drawDivision(){
-    ctx.beginPath();
-    ctx.moveTo(600, 0);
-    ctx.lineTo(600, 800);
-    ctx.closePath();
-    ctx.stroke();
 }
 
 // Draw four drag anchors for image
@@ -108,7 +96,6 @@ function drawDragAnchor(x, y) {
 function redrawDraggables(){
     for (var i = 0; i < draggableImageArray.length; i++) {
         var dg = draggableImageArray[i];
-        console.log(dg.imageDegree);
         draw(dg);
     }
     if (draggingImage) {
@@ -146,7 +133,6 @@ function clean(){
 // redraw canvas
 function flushCanvas(){
     clean();
-    drawDivision();
     redrawDraggables();
     redrawFloatingPanel();
 }
@@ -167,7 +153,6 @@ function hitImage(x, y) {
 // Find clicked resize anchor
 function anchorHitTest(x, y) {
     if (selectedImage) {
-        console.log(x, "  ", y);
         var dx, dy;
         // top-left
         dx = x - selectedImage.imageLeft();
@@ -292,6 +277,3 @@ $("#canvas").mouseup(function (e) {
 $("#canvas").mouseout(function (e) {
     handleMouseOut(e);
 });
-
-// Draw division
-drawDivision();
