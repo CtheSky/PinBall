@@ -2,57 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>Title</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: ivory;
-            padding:10px;
-        }
-
-        #canvas {
-            border:1px solid red;
-        }
-
-        #panel {
-            position: absolute;
-            z-index: 1;
-            left: -999px;
-            top: -999px;
-            margin-left: 0;
-            width: 350px;
-        }
-
-        #generator {
-            width: 300px;
-            position: absolute;
-            z-index: 1;
-            left: 0;
-            top: 0;
-        }
-
-        .icon-flipped {
-            transform: scaleX(-1);
-            -moz-transform: scaleX(-1);
-            -webkit-transform: scaleX(-1);
-            -ms-transform: scaleX(-1);
-        }
-
-        .control-panel-col{
-            padding: 0;
-            display: none;
-        }
-
-        .control-button-col{
-            padding: 0;
-            width: 30px;
-        }
-
-        .input-group {
-            padding-bottom: 5px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
     <canvas id="canvas" width="950" height="700"></canvas>
@@ -133,87 +87,6 @@
     <script src="js/Panel.js"></script>
     <script src="js/GenerateBlock.js"></script>
     <script>
-//        var dynamicSquare = new DynamicSquare({
-//            imageSrc: 'img/dynamicSquare.png',
-//            imageX: 620,
-//            imageY: 20,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var dynamicSquare2 = new DynamicSquare({
-//            imageSrc: 'img/dynamicSquare.png',
-//            imageX: 700,
-//            imageY: 20,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var staticSquare = new StaticSquare({
-//            imageSrc: 'img/staticSquare.png',
-//            imageX: 620,
-//            imageY: 100,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var staticSquare2 = new StaticSquare({
-//            imageSrc: 'img/staticSquare.png',
-//            imageX: 700,
-//            imageY: 100,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var dynamicCircle = new DynamicCircle({
-//            imageSrc: 'img/dynamicCircle.png',
-//            imageX: 620,
-//            imageY: 180,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var staticCircle = new StaticCircle({
-//            imageSrc: 'img/staticCircle.png',
-//            imageX: 700,
-//            imageY: 180,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var dynamicTriangle = new DynamicTriangle({
-//            imageSrc: 'img/dynamicTriangle.png',
-//            imageX: 620,
-//            imageY: 260,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var staticTriangle = new StaticTriangle({
-//            imageSrc: 'img/staticTriangle.png',
-//            imageX: 700,
-//            imageY: 260,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var leftFlip = new LeftFlip({
-//            imageSrc: 'img/leftFlip.png',
-//            imageX: 620,
-//            imageY: 340,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        var rightFlip = new RightFlip({
-//            imageSrc: 'img/rightFlip.png',
-//            imageX: 700,
-//            imageY: 340,
-//            imageWidth: 50,
-//            imageHeight: 50
-//        });
-//        draggableImageArray.push(dynamicSquare);
-//        draggableImageArray.push(dynamicSquare2);
-//        draggableImageArray.push(staticSquare);
-//        draggableImageArray.push(staticSquare2);
-//        draggableImageArray.push(dynamicCircle);
-//        draggableImageArray.push(staticCircle);
-//        draggableImageArray.push(dynamicTriangle);
-//        draggableImageArray.push(staticTriangle);
-//        draggableImageArray.push(leftFlip);
-//        draggableImageArray.push(rightFlip);
-
         window.requestAnimFrame = (function(){
             return window.requestAnimationFrame       ||
                     window.webkitRequestAnimationFrame ||
