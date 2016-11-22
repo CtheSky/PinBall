@@ -83,7 +83,7 @@ function draw(dg){
 function drawDivision(){
     ctx.beginPath();
     ctx.moveTo(600, 0);
-    ctx.lineTo(600, 400);
+    ctx.lineTo(600, 800);
     ctx.closePath();
     ctx.stroke();
 }
@@ -198,45 +198,6 @@ function anchorHitTest(x, y) {
 }
 
 
-// ----- Rotate Event Handler -----
-var timeout, timeInterval = 20;
-$('#cw').on('mousedown', function(){
-    var rotateAndDraw = function(){
-        selectedImage.imageDegree = (selectedImage.imageDegree + 1) % 360;
-        flushCanvas();
-        timeout = setTimeout(rotateAndDraw, timeInterval);
-    };
-    timeout = setTimeout(rotateAndDraw, timeInterval);
-}).on('mouseup mouseleave', function() {
-    clearTimeout(timeout);
-});
-
-$('#ccw').on('mousedown', function(){
-    var rotateAndDraw = function(){
-        selectedImage.imageDegree = (selectedImage.imageDegree - 1) % 360;
-        flushCanvas();
-        timeout = setTimeout(rotateAndDraw, timeInterval);
-    };
-    timeout = setTimeout(rotateAndDraw, timeInterval);
-}).on('mouseup mouseleave', function() {
-    clearTimeout(timeout);
-});
-
-// Delete Event Handler
-$('#delete').click(function(){
-    var index = draggableImageArray.indexOf(selectedImage);
-    draggableImageArray.splice(index, 1);
-    selectedImage = null;
-    flushCanvas();
-});
-
-// Key bind Event Handler
-$('#bind').click(function(){
-    var key = $('#key_bind').val();
-    selectedImage.keyBind = key;
-    console.log(key);
-});
-
 // ----- Mouse Event Handler -----
 function handleMouseDown(e) {
     startX = parseInt(e.clientX - offsetX);
@@ -247,6 +208,7 @@ function handleMouseDown(e) {
         draggingImage = clickedImage;
         selectedImage = clickedImage;
         flushCanvas();
+        flushPanel();
     }
 }
 
