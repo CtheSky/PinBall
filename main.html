@@ -23,6 +23,14 @@
             width: 350px;
         }
 
+        #generator {
+            width: 300px;
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            top: 0;
+        }
+
         .icon-flipped {
             transform: scaleX(-1);
             -moz-transform: scaleX(-1);
@@ -47,8 +55,34 @@
     </style>
 </head>
 <body>
-    <p>Test produce box2d rectangle <button id="start">start</button></p>
-    <canvas id="canvas" width="800" height="800"></canvas>
+    <canvas id="canvas" width="950" height="700"></canvas>
+    <div id="generator" class="panel panel-default">
+        <div class="panel-heading">
+            <div class="input-group">
+                <span class="input-group-addon">Construct blocks & Start game</span>
+                <input id="start" type="button" class="form-control" value="Go!">
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="input-group">
+                <select id="input-block-type" class="form-control">
+                    <option>Static Rectangle</option>
+                    <option>Static Circle</option>
+                    <option>Static Triangle</option>
+                    <option>Dynamic Rectangle</option>
+                    <option>Dynamic Circle</option>
+                    <option>Dynamic Triangle</option>
+                    <option>Left Flip</option>
+                    <option>Right Flip</option>
+                </select>
+                <span class="input-group-btn">
+                    <button id="generate" class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
     <div id="panel" class="row">
         <div class="col-md-2 control-button-col">
             <button id="info" class="btn btn-default btn-xs">
@@ -97,87 +131,88 @@
     <script src="js/Draggable.js"></script>
     <script src="js/ConstructBlock.js"></script>
     <script src="js/Panel.js"></script>
+    <script src="js/GenerateBlock.js"></script>
     <script>
-        var dynamicSquare = new DynamicSquare({
-            imageSrc: 'img/dynamicSquare.png',
-            imageX: 620,
-            imageY: 20,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var dynamicSquare2 = new DynamicSquare({
-            imageSrc: 'img/dynamicSquare.png',
-            imageX: 700,
-            imageY: 20,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var staticSquare = new StaticSquare({
-            imageSrc: 'img/staticSquare.png',
-            imageX: 620,
-            imageY: 100,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var staticSquare2 = new StaticSquare({
-            imageSrc: 'img/staticSquare.png',
-            imageX: 700,
-            imageY: 100,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var dynamicCircle = new DynamicCircle({
-            imageSrc: 'img/dynamicCircle.png',
-            imageX: 620,
-            imageY: 180,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var staticCircle = new StaticCircle({
-            imageSrc: 'img/staticCircle.png',
-            imageX: 700,
-            imageY: 180,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var dynamicTriangle = new DynamicTriangle({
-            imageSrc: 'img/dynamicTriangle.png',
-            imageX: 620,
-            imageY: 260,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var staticTriangle = new StaticTriangle({
-            imageSrc: 'img/staticTriangle.png',
-            imageX: 700,
-            imageY: 260,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var leftFlip = new LeftFlip({
-            imageSrc: 'img/leftFlip.png',
-            imageX: 620,
-            imageY: 340,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        var rightFlip = new RightFlip({
-            imageSrc: 'img/rightFlip.png',
-            imageX: 700,
-            imageY: 340,
-            imageWidth: 50,
-            imageHeight: 50
-        });
-        draggableImageArray.push(dynamicSquare);
-        draggableImageArray.push(dynamicSquare2);
-        draggableImageArray.push(staticSquare);
-        draggableImageArray.push(staticSquare2);
-        draggableImageArray.push(dynamicCircle);
-        draggableImageArray.push(staticCircle);
-        draggableImageArray.push(dynamicTriangle);
-        draggableImageArray.push(staticTriangle);
-        draggableImageArray.push(leftFlip);
-        draggableImageArray.push(rightFlip);
+//        var dynamicSquare = new DynamicSquare({
+//            imageSrc: 'img/dynamicSquare.png',
+//            imageX: 620,
+//            imageY: 20,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var dynamicSquare2 = new DynamicSquare({
+//            imageSrc: 'img/dynamicSquare.png',
+//            imageX: 700,
+//            imageY: 20,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var staticSquare = new StaticSquare({
+//            imageSrc: 'img/staticSquare.png',
+//            imageX: 620,
+//            imageY: 100,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var staticSquare2 = new StaticSquare({
+//            imageSrc: 'img/staticSquare.png',
+//            imageX: 700,
+//            imageY: 100,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var dynamicCircle = new DynamicCircle({
+//            imageSrc: 'img/dynamicCircle.png',
+//            imageX: 620,
+//            imageY: 180,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var staticCircle = new StaticCircle({
+//            imageSrc: 'img/staticCircle.png',
+//            imageX: 700,
+//            imageY: 180,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var dynamicTriangle = new DynamicTriangle({
+//            imageSrc: 'img/dynamicTriangle.png',
+//            imageX: 620,
+//            imageY: 260,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var staticTriangle = new StaticTriangle({
+//            imageSrc: 'img/staticTriangle.png',
+//            imageX: 700,
+//            imageY: 260,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var leftFlip = new LeftFlip({
+//            imageSrc: 'img/leftFlip.png',
+//            imageX: 620,
+//            imageY: 340,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        var rightFlip = new RightFlip({
+//            imageSrc: 'img/rightFlip.png',
+//            imageX: 700,
+//            imageY: 340,
+//            imageWidth: 50,
+//            imageHeight: 50
+//        });
+//        draggableImageArray.push(dynamicSquare);
+//        draggableImageArray.push(dynamicSquare2);
+//        draggableImageArray.push(staticSquare);
+//        draggableImageArray.push(staticSquare2);
+//        draggableImageArray.push(dynamicCircle);
+//        draggableImageArray.push(staticCircle);
+//        draggableImageArray.push(dynamicTriangle);
+//        draggableImageArray.push(staticTriangle);
+//        draggableImageArray.push(leftFlip);
+//        draggableImageArray.push(rightFlip);
 
         window.requestAnimFrame = (function(){
             return window.requestAnimationFrame       ||
