@@ -80,9 +80,15 @@ $('#delete').click(function(){
 
 // Key bind Event Handler
 $('#bind').click(function(){
-    var key = $('#key_bind').val();
-    selectedImage.keyBind = key;
-    console.log(key);
+    var $inputKey = $('#input_key');
+    var key = $inputKey.val();
+    if (key.match(/^[0-9a-z]+$/)) {
+        selectedImage.keyBind = key;
+    } else {
+        alert('Key binding should be AlphaNumeric!');
+    }
+    $inputKey.val('');
+    $inputKey.attr('placeholder', 'Current binding: ' + selectedImage.keyBind);
 });
 
 // Flush panel input value when selectedImage changes
