@@ -204,7 +204,7 @@ function createLeftFlipBox2dObjectInWorld(world) {
     // ------- create key bind -------
     var flipKeyMap = new FlipKeyMap(this.keyBind, body, null, body.GetPosition());
     // compute force vector
-    vLength = 10000;
+    vLength = 1000;
     degreeOffset = 90 - Math.atan(this.imageHeight / this.imageWidth) / TO_RADIANS;
     vRadian = (degreeOffset - this.imageDegree) * TO_RADIANS;
     flipKeyMap.forceVector = new b2Vec2(vLength * Math.cos(vRadian), -1 * vLength * Math.sin(vRadian));
@@ -269,7 +269,7 @@ function createRightFlipBox2dObjectInWorld(world) {
     // ------- create key bind -------
     var flipKeyMap = new FlipKeyMap(this.keyBind, body, null, body.GetPosition());
     // compute force vector
-    vLength = 10000;
+    vLength = 1000;
     degreeOffset = 90 + Math.atan(this.imageHeight / this.imageWidth) / TO_RADIANS;
     vRadian = (degreeOffset - this.imageDegree) * TO_RADIANS;
     flipKeyMap.forceVector = new b2Vec2(vLength * Math.cos(vRadian), -1 * vLength * Math.sin(vRadian));
