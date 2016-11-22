@@ -44,9 +44,17 @@ STATIC_DEF_EXAMPLE.fixDef.friction = 0.5;
 STATIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
 STATIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_staticBody;
 
+var KINEMATIC_DEF_EXAMPLE = {
+    fixDef: new b2FixtureDef,
+    bodyDef: new b2BodyDef
+};
+KINEMATIC_DEF_EXAMPLE.fixDef.density = 1.0;
+KINEMATIC_DEF_EXAMPLE.fixDef.friction = 0.5;
+KINEMATIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
+KINEMATIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_kinematicBody;
 
 /*
- * -------- Subclass of Draggable -----------
+ * -------- Construct blocks,subclass of Draggable -----------
  */
 var StaticSquare = function(imageProp){ Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp); };
 StaticSquare.prototype = Object.create(Draggable.prototype);
@@ -188,10 +196,19 @@ function createLeftFlipBox2dObjectInWorld(world) {
     jointDef.lowerAngle     = -30 * TO_RADIANS;
     jointDef.upperAngle     = 30 * TO_RADIANS;
     jointDef.enableLimit    = true;
-    // jointDef.maxMotorTorque = 10.0;
-    // jointDef.motorSpeed     = 2.0;
-    // jointDef.enableMotor    = true;
+    jointDef.maxMotorTorque = 10.0;
+    jointDef.motorSpeed     = -2.0;
+    jointDef.enableMotor    = true;
     world.CreateJoint(jointDef);
+
+    // ------- create key bind -------
+    var flipKeyMap = new FlipKeyMap(this.keyBind, body, null, body.GetPosition());
+    // compute force vector
+    vLength = 10000;
+    degreeOffset = 90 - Math.atan(this.imageHeight / this.imageWidth) / TO_RADIANS;
+    vRadian = (degreeOffset - this.imageDegree) * TO_RADIANS;
+    flipKeyMap.forceVector = new b2Vec2(vLength * Math.cos(vRadian), -1 * vLength * Math.sin(vRadian));
+    flipKeyMaps.push(flipKeyMap);
 }
 
 // Help function to create left flip box2d object
@@ -244,8 +261,38 @@ function createRightFlipBox2dObjectInWorld(world) {
     jointDef.lowerAngle     = -30 * TO_RADIANS;
     jointDef.upperAngle     = 30 * TO_RADIANS;
     jointDef.enableLimit    = true;
-    // jointDef.maxMotorTorque = 10.0;
-    // jointDef.motorSpeed     = 2.0;
-    // jointDef.enableMotor    = true;
+    jointDef.maxMotorTorque = 10.0;
+    jointDef.motorSpeed     = 2.0;
+    jointDef.enableMotor    = true;
     world.CreateJoint(jointDef);
+
+    // ------- create key bind -------
+    var flipKeyMap = new FlipKeyMap(this.keyBind, body, null, body.GetPosition());
+    // compute force vector
+    vLength = 10000;
+    degreeOffset = 90 + Math.atan(this.imageHeight / this.imageWidth) / TO_RADIANS;
+    vRadian = (degreeOffset - this.imageDegree) * TO_RADIANS;
+    flipKeyMap.forceVector = new b2Vec2(vLength * Math.cos(vRadian), -1 * vLength * Math.sin(vRadian));
+    flipKeyMaps.push(flipKeyMap);
 }
+
+/*
+ * -------------- FlipKeyMap, store force triggered by keyDown--------------
+ */
+var FlipKeyMap = function(key, body, forceVector,positionVector){
+    this.key = key;
+    this.body = body;
+    this.forceVector = forceVector;
+    this.positionVector = positionVector;
+};
+var flipKeyMaps = [];
+// KeyDown Handler
+document.body.addEventListener('keydown', function(e){
+    console.log('' + e.key);
+    for (var i = 0; i < flipKeyMaps.length; i++) {
+        var flipKeyMap = flipKeyMaps[i];
+        if (flipKeyMap.key == e.key) {
+            flipKeyMap.body.ApplyForce(flipKeyMap.forceVector, flipKeyMap.positionVector);
+        }
+    }
+});
