@@ -24,81 +24,75 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
     , b2DebugDraw = Box2D.Dynamics.b2DebugDraw
     ;
 
-// Set dynamic box2d definition constant
-var DYNAMIC_DEF_EXAMPLE = {
-    fixDef: new b2FixtureDef,
-    bodyDef: new b2BodyDef
-};
-DYNAMIC_DEF_EXAMPLE.fixDef.density = 1.0;
-DYNAMIC_DEF_EXAMPLE.fixDef.friction = 0.5;
-DYNAMIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
-DYNAMIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_dynamicBody;
+// Dynamic box2d definition generator
+var DynamicBox2dDef = function(){
+    this.fixDef = new b2FixtureDef;
+    this.bodyDef = new b2BodyDef;
 
-// Set static box2d definition constant
-var STATIC_DEF_EXAMPLE = {
-    fixDef: new b2FixtureDef,
-    bodyDef: new b2BodyDef
+    this.fixDef.density = 1.0;
+    this.fixDef.friction = 0.5;
+    this.fixDef.restitution = 0.2;
+    this.bodyDef.type = b2Body.b2_dynamicBody;
 };
-STATIC_DEF_EXAMPLE.fixDef.density = 1.0;
-STATIC_DEF_EXAMPLE.fixDef.friction = 0.5;
-STATIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
-STATIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_staticBody;
 
-var KINEMATIC_DEF_EXAMPLE = {
-    fixDef: new b2FixtureDef,
-    bodyDef: new b2BodyDef
+// Static box2d definition generator
+var StaticBox2dDef = function(){
+    this.fixDef = new b2FixtureDef;
+    this.bodyDef = new b2BodyDef;
+
+    this.fixDef.density = 1.0;
+    this.fixDef.friction = 0.5;
+    this.fixDef.restitution = 0.2;
+    this.bodyDef.type = b2Body.b2_staticBody;
 };
-KINEMATIC_DEF_EXAMPLE.fixDef.density = 1.0;
-KINEMATIC_DEF_EXAMPLE.fixDef.friction = 0.5;
-KINEMATIC_DEF_EXAMPLE.fixDef.restitution = 0.2;
-KINEMATIC_DEF_EXAMPLE.bodyDef.type = b2Body.b2_kinematicBody;
+
 
 /*
  * -------- Construct blocks,subclass of Draggable -----------
  */
-var StaticSquare = function(imageProp){ Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp); };
+var StaticSquare = function(imageProp){ Draggable.call(this, new StaticBox2dDef(), imageProp); };
 StaticSquare.prototype = Object.create(Draggable.prototype);
 StaticSquare.prototype.constructor = StaticSquare;
 StaticSquare.prototype.createBox2dObjectInWorld = createSquareBox2dObjectInWorld;
 
-var DynamicSquare = function(imageProp){ Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp); };
+var DynamicSquare = function(imageProp){ Draggable.call(this, new DynamicBox2dDef(), imageProp); };
 DynamicSquare.prototype = Object.create(Draggable.prototype);
 DynamicSquare.prototype.constructor = DynamicSquare;
 DynamicSquare.prototype.createBox2dObjectInWorld = createSquareBox2dObjectInWorld;
 
-var StaticCircle = function(imageProp){ Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp); };
+var StaticCircle = function(imageProp){ Draggable.call(this, new StaticBox2dDef(), imageProp); };
 StaticCircle.prototype = Object.create(Draggable.prototype);
 StaticCircle.prototype.constructor = StaticCircle;
 StaticCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorld;
 
-var DynamicCircle = function(imageProp){ Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp); };
+var DynamicCircle = function(imageProp){ Draggable.call(this, new DynamicBox2dDef(), imageProp); };
 DynamicCircle.prototype = Object.create(Draggable.prototype);
 DynamicCircle.prototype.constructor = DynamicCircle;
 DynamicCircle.prototype.createBox2dObjectInWorld = createCircleBox2dObjectInWorld;
 
 var StaticTriangle = function(imageProp){
-    Draggable.call(this, STATIC_DEF_EXAMPLE, imageProp);
+    Draggable.call(this, new StaticBox2dDef(), imageProp);
 };
 StaticTriangle.prototype = Object.create(Draggable.prototype);
 StaticTriangle.prototype.constructor = StaticTriangle;
 StaticTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectInWorld;
 
 var DynamicTriangle = function(imageProp){
-    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
+    Draggable.call(this, new DynamicBox2dDef(), imageProp);
 };
 DynamicTriangle.prototype = Object.create(Draggable.prototype);
 DynamicTriangle.prototype.constructor = DynamicTriangle;
 DynamicTriangle.prototype.createBox2dObjectInWorld = createTriangleBox2dObjectInWorld;
 
 var LeftFlip = function(imageProp) {
-    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
+    Draggable.call(this, new DynamicBox2dDef(), imageProp);
 };
 LeftFlip.prototype = Object.create(Draggable.prototype);
 LeftFlip.prototype.constructor = LeftFlip;
 LeftFlip.prototype.createBox2dObjectInWorld = createLeftFlipBox2dObjectInWorld;
 
 var RightFlip = function(imageProp) {
-    Draggable.call(this, DYNAMIC_DEF_EXAMPLE, imageProp);
+    Draggable.call(this, new DynamicBox2dDef(), imageProp);
 };
 RightFlip.prototype = Object.create(Draggable.prototype);
 RightFlip.prototype.constructor = RightFlip;
@@ -173,7 +167,7 @@ function createLeftFlipBox2dObjectInWorld(world) {
         new b2Vec2(-0.49 * this.imageWidth / SCALE, -0.49 * this.imageHeight / SCALE),
         new b2Vec2(-0.5 * this.imageWidth / SCALE, -0.49 * this.imageHeight / SCALE)
     ];
-    this.b2BodyDef = STATIC_DEF_EXAMPLE.bodyDef;
+    this.b2BodyDef = new StaticBox2dDef().bodyDef;
     this.b2FixtureDef.shape = new b2PolygonShape;
     this.b2FixtureDef.shape.SetAsArray(vectors, vectors.length);
     this.b2BodyDef.position.x = (this.imageX + this.imageWidth * 0.5) / SCALE;
@@ -238,7 +232,7 @@ function createRightFlipBox2dObjectInWorld(world) {
         new b2Vec2(0.5 * this.imageWidth / SCALE, -0.49 * this.imageHeight / SCALE),
         new b2Vec2(0.49 * this.imageWidth / SCALE, -0.49 * this.imageHeight / SCALE)
     ];
-    this.b2BodyDef = STATIC_DEF_EXAMPLE.bodyDef;
+    this.b2BodyDef = new StaticBox2dDef().bodyDef;
     this.b2FixtureDef.shape = new b2PolygonShape;
     this.b2FixtureDef.shape.SetAsArray(vectors, vectors.length);
     this.b2BodyDef.position.x = (this.imageX + this.imageWidth * 0.5) / SCALE;
