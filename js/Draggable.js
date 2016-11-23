@@ -35,13 +35,17 @@ var draggingImage = null;
 var selectedImage = null;
 
 // Dragging resizer related vars
-var pi2 = Math.PI * 2;
 var resizerRadius = 8;
 var rr = resizerRadius * resizerRadius;
 var draggingResizer = {
     x: 0,
     y: 0
 };
+var anchorImages = [new Image(), new Image(), new Image(), new Image()];
+anchorImages[0].src = 'img/anchorLT.png';
+anchorImages[1].src = 'img/anchorRT.png';
+anchorImages[2].src = 'img/anchorLB.png';
+anchorImages[3].src = 'img/anchorRB.png';
 
 // translate from degree rto radian
 var TO_RADIANS = Math.PI / 180;
@@ -93,18 +97,15 @@ function draw(dg){
 
 // Draw four drag anchors for image
 function drawDragAnchors(dg){
-    drawDragAnchor(dg.imageLeft(), dg.imageTop());
-    drawDragAnchor(dg.imageRight(), dg.imageTop());
-    drawDragAnchor(dg.imageRight(), dg.imageBottom());
-    drawDragAnchor(dg.imageLeft(), dg.imageBottom());
+    drawDragAnchor(dg.imageLeft(), dg.imageTop(), 0);
+    drawDragAnchor(dg.imageRight(), dg.imageTop(), 1);
+    drawDragAnchor(dg.imageLeft(), dg.imageBottom(), 2);
+    drawDragAnchor(dg.imageRight(), dg.imageBottom(), 3);
 }
 
 // Draw a single drag anchor
-function drawDragAnchor(x, y) {
-    ctx.beginPath();
-    ctx.arc(x, y, resizerRadius, 0, pi2, false);
-    ctx.closePath();
-    ctx.fill();
+function drawDragAnchor(x, y, index) {
+    ctx.drawImage(anchorImages[index], x - 8, y - 8);
 }
 
 // Redraw all draggable instances and division line
