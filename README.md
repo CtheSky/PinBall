@@ -23,3 +23,6 @@ provides a flexible way to build your own pinball game.
 
 # To Run
 Open 'index.html'
+
+# Deployed Demo
+https://cthesky.github.io/Pinball-Constructor/
