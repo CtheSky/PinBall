@@ -41,11 +41,18 @@ var draggingResizer = {
     x: 0,
     y: 0
 };
-var anchorImages = [new Image(), new Image(), new Image(), new Image()];
-anchorImages[0].src = 'img/anchorLT.png';
-anchorImages[1].src = 'img/anchorRT.png';
-anchorImages[2].src = 'img/anchorLB.png';
-anchorImages[3].src = 'img/anchorRB.png';
+
+var staticAnchorImages = [new Image(), new Image(), new Image(), new Image()];
+staticAnchorImages[0].src = 'img/anchor_static_LT.png';
+staticAnchorImages[1].src = 'img/anchor_static_RT.png';
+staticAnchorImages[2].src = 'img/anchor_static_LB.png';
+staticAnchorImages[3].src = 'img/anchor_static_RB.png';
+
+var dynamicAnchorImages = [new Image(), new Image(), new Image(), new Image()];
+dynamicAnchorImages[0].src = 'img/anchor_dynamic_LT.png';
+dynamicAnchorImages[1].src = 'img/anchor_dynamic_RT.png';
+dynamicAnchorImages[2].src = 'img/anchor_dynamic_LB.png';
+dynamicAnchorImages[3].src = 'img/anchor_dynamic_RB.png';
 
 // translate from degree rto radian
 var TO_RADIANS = Math.PI / 180;
@@ -97,14 +104,19 @@ function draw(dg){
 
 // Draw four drag anchors for image
 function drawDragAnchors(dg){
-    drawDragAnchor(dg.imageLeft(), dg.imageTop(), 0);
-    drawDragAnchor(dg.imageRight(), dg.imageTop(), 1);
-    drawDragAnchor(dg.imageLeft(), dg.imageBottom(), 2);
-    drawDragAnchor(dg.imageRight(), dg.imageBottom(), 3);
+    var images;
+    if (dg.b2BodyDef.type == b2Body.b2_staticBody)
+        images = staticAnchorImages;
+    else
+        images = dynamicAnchorImages;
+    drawDragAnchor(dg.imageLeft(), dg.imageTop(), images, 0);
+    drawDragAnchor(dg.imageRight(), dg.imageTop(), images, 1);
+    drawDragAnchor(dg.imageLeft(), dg.imageBottom(), images, 2);
+    drawDragAnchor(dg.imageRight(), dg.imageBottom(), images, 3);
 }
 
 // Draw a single drag anchor
-function drawDragAnchor(x, y, index) {
+function drawDragAnchor(x, y, anchorImages,index) {
     ctx.drawImage(anchorImages[index], x - 8, y - 8);
 }
 
