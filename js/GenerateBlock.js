@@ -8,8 +8,12 @@ var $generator = $('#generator');
 // Set position to top-right corner of canvas
 var topOffset = canvasOffset.top;
 var leftOffset = canvasOffset.left + canvas.width - $generator.width();
-$generator.css('top',topOffset);
-$generator.css('left',leftOffset);
+setTimeout(function(){
+    $generator.hide().show(200);
+    $generator.css('top',topOffset);
+    $generator.css('left',leftOffset);
+}, 500);
+
 
 // Set position for imageProp
 var imageProp = {

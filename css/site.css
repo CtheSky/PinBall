@@ -21,8 +21,8 @@ body {
     width: 300px;
     position: absolute;
     z-index: 1;
-    left: 0;
-    top: 0;
+    left: -999px;
+    top: -999px;
 }
 
 .icon-flipped {
