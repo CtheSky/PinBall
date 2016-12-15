@@ -1,6 +1,6 @@
 # Pinball Constructor
-This is a webpage game in which you construct a pinball game and play with it. It has several basic construct blocks and 
-provides a flexible way to build your own pinball game.
+This is a pinball game which allows you to create your own scenes. It has several basic construct blocks and 
+provides a flexible and easy way to build your own pinball game.
 
 # Basic construct blocks
 - Rectangle (Static/Dynamic)
