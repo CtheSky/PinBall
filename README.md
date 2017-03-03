@@ -1,8 +1,9 @@
 # Pinball Constructor
-This is a pinball game which allows you to create your own scenes. It has several basic construct blocks and 
-provides a flexible and easy way to build your own pinball game.
+Construct your own pinball game and play with it. There're several basic construct blocks and 
+it's easy & flexible to build.
 
 # Basic construct blocks
+Dynamic blocks are effected by gravity while Static blocks are not.
 - Rectangle (Static/Dynamic)
 - Circle (Static/Dynamic)
 - Triangle (Static/Dynamic)
@@ -20,9 +21,6 @@ provides a flexible and easy way to build your own pinball game.
 - [Box2dFlash](http://www.box2dflash.org/)
 - [jQuery](http://jquery.com/)
 - [Bootstrap](http://getbootstrap.com/)
-
-# To Run
-Open 'index.html'
 
 # Deployed Demo
 https://cthesky.github.io/Pinball-Constructor/
